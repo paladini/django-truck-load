@@ -6,6 +6,7 @@ class Truck(models.Model):
     Truck Model
     Define the attributes of a truck
     """
+    id_truck = models.IntegerField(primary_key=True)
     truck = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
     state = models.CharField(max_length=2)
@@ -15,16 +16,17 @@ class Truck(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     
     def get_truck_info(self):
-        return self.truck + ' is located in ' + self.city + ' / ' + self.state + ' at latitude ' + self.lat + ' and longitude ' + self.lng
+        return self.truck + ' is located in ' + self.city + ' / ' + self.state + ' at latitude ' + str(self.lat) + ' and longitude ' + str(self.lng)
 
     def __repr__(self):
-        return self.name + ' is added.'
+        return self.truck + ' is added.'
 
 class Load(models.Model):
     """
     Load Model
     Define the attributes of a load
     """
+    id_load = models.IntegerField(primary_key=True)
     product = models.CharField(max_length=255)
     
     # Origin address
@@ -46,4 +48,5 @@ class Load(models.Model):
         return self.product + ' is located in ' + self.orig_city + ' / ' + self.orig_state + ' and should travel to ' + self.dest_city + ' / ' + self.dest_state + '.'
 
     def __repr__(self):
-        return self.name + ' is added.'
+        return self.product + ' is added.'
+
