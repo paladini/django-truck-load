@@ -18,7 +18,8 @@ def get_delete_update_truck(request, pk):
 
     # get details of a single truck
     if request.method == 'GET':
-        return Response({})
+        serializer = TruckSerializer(truck)
+        return Response(serializer.data)
     # delete a single truck
     elif request.method == 'DELETE':
         return Response({})
@@ -48,7 +49,8 @@ def get_delete_update_load(request, pk):
 
     # get details of a single load
     if request.method == 'GET':
-        return Response({})
+        serializer = LoadSerializer(load)
+        return Response(serializer.data)
     # delete a single load
     elif request.method == 'DELETE':
         return Response({})
