@@ -15,6 +15,25 @@ class Truck(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
+    def clean(self):
+        if (not self.id_truck) or (self.id_truck <= 0):
+            raise ValidationError("Truck ID must be be greater than 0.")
+
+        if (not self.truck) or (not self.truck.strip()):
+            raise ValidationError("Truck name cannot be empty.")
+
+        if (not self.city) or (not self.city.strip()):
+            raise ValidationError("City name cannot be empty.")
+
+        if (not self.state) or (not self.state.strip()):
+            raise ValidationError("State name cannot be empty and it's size should be only 2 characters.")
+
+        if (not self.lat) or (not self.lat <= 0):
+            raise ValidationError("Latitude should be greater than 0.")
+        
+        if (not self.lng) or (not self.lng <= 0):
+            raise ValidationError("Longitude should be greater than 0.")
+
     def get_truck_info(self):
         return self.truck + ' is located in ' + self.city + ' / ' + self.state + ' at latitude ' + str(self.lat) + ' and longitude ' + str(self.lng)
 
@@ -44,6 +63,10 @@ class Load(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
+    def clean(self):
+        if (not self.id_load) or (not self.id_load <= 0):
+            raise ValidationError("Load ID should be greater than 0.")
+
     def get_load_info(self):
         return self.product + ' is located in ' + self.orig_city + ' / ' + self.orig_state + ' and should travel to ' + self.dest_city + ' / ' + self.dest_state + '.'
 
