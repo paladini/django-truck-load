@@ -1,4 +1,5 @@
 import json
+import copy
 from rest_framework import status
 from django.test import TestCase, Client
 from django.urls import reverse
@@ -288,7 +289,7 @@ class CreateNewTruckTest(TestCase):
             'city': 'Florence', 
             'state': 'AL', 
             'lat': 34.79981, 
-            'lng': None
+            'lng': 0
         }
 
     def test_create_valid_truck(self):
@@ -300,8 +301,18 @@ class CreateNewTruckTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_create_invalid_truck_name(self):
-        invalid = self.invalid_payload.copy()
+        invalid = copy.deepcopy(valid_payload)
         invalid['truck'] = ''
+        response = client.post(
+            reverse('get_post_trucks'),
+            data=json.dumps(invalid),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_invalid_truck_city(self):
+        invalid = copy.deepcopy(valid_payload)
+        invalid['city'] = ''
         response = client.post(
             reverse('get_post_trucks'),
             data=json.dumps(self.invalid),
@@ -309,15 +320,9 @@ class CreateNewTruckTest(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_create_invalid_truck_city(self):
-        response = client.post(
-            reverse('get_post_trucks'),
-            data=json.dumps(self.invalid_payload2),
-            content_type='application/json'
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
     def test_create_invalid_truck_state(self):
+        invalid = copy.deepcopy(valid_payload)
+        invalid['city'] = ''
         response = client.post(
             reverse('get_post_trucks'),
             data=json.dumps(self.invalid_payload3),

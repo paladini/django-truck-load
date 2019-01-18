@@ -9,6 +9,9 @@ from .serializers import LoadSerializer
 # /truck/:id_truck
 @api_view(['GET', 'DELETE', 'PUT'])
 def get_delete_update_truck(request, pk):
+    """
+        Retrieve/Delete/Update a specific Truck.
+    """
     try:
         truck = Truck.objects.get(pk=pk)
     except Truck.DoesNotExist:
@@ -28,6 +31,9 @@ def get_delete_update_truck(request, pk):
 # /trucks
 @api_view(['GET', 'POST'])
 def get_post_trucks(request):
+    """
+        Retrieve all Trucks from database or insert a new Truck record.
+    """
     # get all trucks
     if request.method == 'GET':
         trucks = Truck.objects.all()
@@ -52,6 +58,9 @@ def get_post_trucks(request):
 # /load/:id_load
 @api_view(['GET', 'DELETE', 'PUT'])
 def get_delete_update_load(request, pk):
+    """
+        Retrieve/Delete/Update a specific Load.
+    """
     try:
         load = Load.objects.get(pk=pk)
     except Load.DoesNotExist:
@@ -71,6 +80,9 @@ def get_delete_update_load(request, pk):
 # /loads
 @api_view(['GET', 'POST'])
 def get_post_loads(request):
+    """
+        Retrieve all Loads from database or insert a new Load record.
+    """
     # get all loads
     if request.method == 'GET':
         loads = Load.objects.all()
@@ -78,9 +90,6 @@ def get_post_loads(request):
         return Response(serializer.data)
     # insert a new record for a load
     elif request.method == 'POST':
-
-    	
-    	
         data = {
         	'id_load': request.data.get('id_load'), 
 			'product': request.data.get('product'), 

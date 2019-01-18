@@ -67,6 +67,33 @@ class Load(models.Model):
         if (not self.id_load) or (not self.id_load <= 0):
             raise ValidationError("Load ID should be greater than 0.")
 
+        if (not self.product) or (not self.product.strip()):
+            raise ValidationError("Load name cannot be empty.")
+
+        if (not self.orig_city) or (not self.orig_city.strip()):
+            raise ValidationError("Origin City name cannot be empty.")
+
+        if (not self.orig_state) or (not self.orig_state.strip()):
+            raise ValidationError("Origin State name cannot be empty and it's size should be only 2 characters.")
+
+        if (not self.orig_lat) or (not self.orig_lat <= 0):
+            raise ValidationError("Origin Latitude should be greater than 0.")
+        
+        if (not self.orig_lng) or (not self.orig_lng <= 0):
+            raise ValidationError("Origin Longitude should be greater than 0.")
+
+        if (not self.dest_city) or (not self.dest_city.strip()):
+            raise ValidationError("Origin City name cannot be empty.")
+
+        if (not self.dest_state) or (not self.dest_state.strip()):
+            raise ValidationError("Origin State name cannot be empty and it's size should be only 2 characters.")
+
+        if (not self.dest_lat) or (not self.dest_lat <= 0):
+            raise ValidationError("Origin Latitude should be greater than 0.")
+        
+        if (not self.dest_lng) or (not self.dest_lng <= 0):
+            raise ValidationError("Origin Longitude should be greater than 0.")
+
     def get_load_info(self):
         return self.product + ' is located in ' + self.orig_city + ' / ' + self.orig_state + ' and should travel to ' + self.dest_city + ' / ' + self.dest_state + '.'
 
