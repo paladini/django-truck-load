@@ -17,7 +17,6 @@ class GetAllTrucksTest(TestCase):
 
     def setUp(self):
         Truck.objects.create(
-            id_truck=1, 
             truck='Hartford Plastics Incartford', 
             city='Florence', 
             state='AL', 
@@ -25,7 +24,6 @@ class GetAllTrucksTest(TestCase):
             lng=-87.677251
         )
         Truck.objects.create(
-            id_truck=2, 
             truck='Beyond Landscape & Design Llcilsonville', 
             city='Fremont', 
             state='CA', 
@@ -33,7 +31,6 @@ class GetAllTrucksTest(TestCase):
             lng=-121.9885719
         )
         Truck.objects.create(
-            id_truck=3, 
             truck='Empire Of Dirt Llcquality', 
             city='Hampden', 
             state='ME', 
@@ -41,7 +38,6 @@ class GetAllTrucksTest(TestCase):
             lng=-68.8370436
         )
         Truck.objects.create(
-            id_truck=4, 
             truck='James Haas Al Haas Shelly Haasairfield', 
             city='North East', 
             state='MD', 
@@ -63,7 +59,6 @@ class GetAllLoadsTest(TestCase):
 
     def setUp(self):
         Load.objects.create(
-            id_load=1, 
             product='Light bulbs', 
             orig_city='Sikeston', 
             orig_state='MO',
@@ -75,7 +70,6 @@ class GetAllLoadsTest(TestCase):
             dest_lng=-97.0780654
         )
         Load.objects.create(
-            id_load=2, 
             product='Recyclables', 
             orig_city='Christiansburg', 
             orig_state='VA',
@@ -87,7 +81,6 @@ class GetAllLoadsTest(TestCase):
             dest_lng=-81.5322149
         )
         Load.objects.create(
-            id_load=3, 
             product='Apples', 
             orig_city='Columbus', 
             orig_state='OH',
@@ -99,7 +92,6 @@ class GetAllLoadsTest(TestCase):
             dest_lng=-121.7732971
         )
         Load.objects.create(
-            id_load=4, 
             product='Wood', 
             orig_city='Hebron', 
             orig_state='KY',
@@ -125,7 +117,6 @@ class GetSingleTruckTest(TestCase):
 
     def setUp(self):
         self.obj1 = Truck.objects.create(
-            id_truck=1, 
             truck='Hartford Plastics Incartford', 
             city='Florence', 
             state='AL', 
@@ -133,7 +124,6 @@ class GetSingleTruckTest(TestCase):
             lng=-87.677251
         )
         self.obj2 = Truck.objects.create(
-            id_truck=2, 
             truck='Beyond Landscape & Design Llcilsonville', 
             city='Fremont', 
             state='CA', 
@@ -141,7 +131,6 @@ class GetSingleTruckTest(TestCase):
             lng=-121.9885719
         )
         self.obj3 = Truck.objects.create(
-            id_truck=3, 
             truck='Empire Of Dirt Llcquality', 
             city='Hampden', 
             state='ME', 
@@ -149,7 +138,6 @@ class GetSingleTruckTest(TestCase):
             lng=-68.8370436
         )
         self.obj4 = Truck.objects.create(
-            id_truck=4,
             truck='James Haas Al Haas Shelly Haasairfield', 
             city='North East', 
             state='MD', 
@@ -175,7 +163,6 @@ class GetSingleLoadTest(TestCase):
 
     def setUp(self):
         self.obj1 = Load.objects.create(
-            id_load=1, 
             product='Light bulbs', 
             orig_city='Sikeston', 
             orig_state='MO',
@@ -187,7 +174,6 @@ class GetSingleLoadTest(TestCase):
             dest_lng=-97.0780654
         )
         self.obj2 = Load.objects.create(
-            id_load=2, 
             product='Recyclables', 
             orig_city='Christiansburg', 
             orig_state='VA',
@@ -199,7 +185,6 @@ class GetSingleLoadTest(TestCase):
             dest_lng=-81.5322149
         )
         self.obj3 = Load.objects.create(
-            id_load=3, 
             product='Apples', 
             orig_city='Columbus', 
             orig_state='OH',
@@ -211,7 +196,6 @@ class GetSingleLoadTest(TestCase):
             dest_lng=-121.7732971
         )
         self.obj4 = Load.objects.create(
-            id_load=4, 
             product='Wood', 
             orig_city='Hebron', 
             orig_state='KY',
@@ -242,54 +226,11 @@ class CreateNewTruckTest(TestCase):
 
     def setUp(self):
         self.valid_payload = {
-            'id_truck': 1, 
             'truck': 'Hartford Plastics Incartford', 
             'city': 'Florence', 
             'state': 'AL', 
             'lat': 34.79981, 
             'lng': -87.677251
-        }
-
-        # TODO: improve to only one invalid payload.
-        self.invalid_payload = {
-            'id_truck': 1, 
-            'truck': 'Hartford Plastics Incartford', 
-            'city': 'Florence', 
-            'state': 'AL', 
-            'lat': 34.79981, 
-            'lng': -87.677251
-        }
-        self.invalid_payload2 = {
-            'id_truck': 1, 
-            'truck': 'Hartford Plastics Incartford', 
-            'city': '', 
-            'state': 'AL', 
-            'lat': 34.79981, 
-            'lng': -87.677251
-        }
-        self.invalid_payload3 = {
-            'id_truck': 1, 
-            'truck': 'Hartford Plastics Incartford', 
-            'city': 'Florence', 
-            'state': '', 
-            'lat': 34.79981, 
-            'lng': -87.677251
-        }
-        self.invalid_payload4 = {
-            'id_truck': 1, 
-            'truck': 'Hartford Plastics Incartford', 
-            'city': 'Florence', 
-            'state': 'AL', 
-            'lat': 0, 
-            'lng': -87.677251
-        }
-        self.invalid_payload5 = {
-            'id_truck': 1, 
-            'truck': 'Hartford Plastics Incartford', 
-            'city': 'Florence', 
-            'state': 'AL', 
-            'lat': 34.79981, 
-            'lng': 0
         }
 
     def test_create_valid_truck(self):
@@ -301,7 +242,7 @@ class CreateNewTruckTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_create_invalid_truck_name(self):
-        invalid = copy.deepcopy(valid_payload)
+        invalid = copy.deepcopy(self.valid_payload)
         invalid['truck'] = ''
         response = client.post(
             reverse('get_post_trucks'),
@@ -311,37 +252,298 @@ class CreateNewTruckTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_create_invalid_truck_city(self):
-        invalid = copy.deepcopy(valid_payload)
+        invalid = copy.deepcopy(self.valid_payload)
         invalid['city'] = ''
         response = client.post(
             reverse('get_post_trucks'),
-            data=json.dumps(self.invalid),
+            data=json.dumps(invalid),
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_create_invalid_truck_state(self):
-        invalid = copy.deepcopy(valid_payload)
-        invalid['city'] = ''
+        invalid = copy.deepcopy(self.valid_payload)
+        invalid['state'] = ''
         response = client.post(
             reverse('get_post_trucks'),
-            data=json.dumps(self.invalid_payload3),
+            data=json.dumps(invalid),
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_create_invalid_truck_lat(self):
+        invalid = copy.deepcopy(self.valid_payload)
+        invalid['lat'] = ''
         response = client.post(
             reverse('get_post_trucks'),
-            data=json.dumps(self.invalid_payload4),
+            data=json.dumps(invalid),
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_create_invalid_truck_lng(self):
+        invalid = copy.deepcopy(self.valid_payload)
+        invalid['lng'] = ''        
         response = client.post(
             reverse('get_post_trucks'),
-            data=json.dumps(self.invalid_payload5),
+            data=json.dumps(invalid),
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+class CreateNewLoad(TestCase):
+    """ Test module for inserting a new load """
+
+    def setUp(self):
+        self.valid_payload = {
+            'product': 'Light bulbs', 
+            'orig_city': 'Sikeston', 
+            'orig_state': 'MO',
+            'orig_lat': 36.876719,
+            'orig_lng': -89.5878579,
+            'dest_city': 'Grapevine',
+            'dest_state': 'TX',
+            'dest_lat': 32.9342919,
+            'dest_lng': -97.0780654
+        }
+
+    def test_create_valid_load(self):
+        response = client.post(
+            reverse('get_post_loads'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_invalid_load_name(self):
+        invalid = copy.deepcopy(self.valid_payload)
+        invalid['product'] = ''
+        response = client.post(
+            reverse('get_post_loads'),
+            data=json.dumps(invalid),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_invalid_load_origin_city(self):
+        invalid = copy.deepcopy(self.valid_payload)
+        invalid['orig_city'] = ''
+        response = client.post(
+            reverse('get_post_loads'),
+            data=json.dumps(invalid),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_invalid_load_origin_state(self):
+        invalid = copy.deepcopy(self.valid_payload)
+        invalid['orig_state'] = ''
+        response = client.post(
+            reverse('get_post_loads'),
+            data=json.dumps(invalid),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_invalid_load_origin_lat(self):
+        invalid = copy.deepcopy(self.valid_payload)
+        invalid['orig_lat'] = ''
+        response = client.post(
+            reverse('get_post_loads'),
+            data=json.dumps(invalid),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_invalid_load_origin_lng(self):
+        invalid = copy.deepcopy(self.valid_payload)
+        invalid['orig_lng'] = ''        
+        response = client.post(
+            reverse('get_post_loads'),
+            data=json.dumps(invalid),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_invalid_load_dest_city(self):
+        invalid = copy.deepcopy(self.valid_payload)
+        invalid['dest_city'] = ''
+        response = client.post(
+            reverse('get_post_loads'),
+            data=json.dumps(invalid),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_invalid_load_dest_state(self):
+        invalid = copy.deepcopy(self.valid_payload)
+        invalid['dest_state'] = ''
+        response = client.post(
+            reverse('get_post_loads'),
+            data=json.dumps(invalid),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_invalid_load_dest_lat(self):
+        invalid = copy.deepcopy(self.valid_payload)
+        invalid['dest_lat'] = ''
+        response = client.post(
+            reverse('get_post_loads'),
+            data=json.dumps(invalid),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_invalid_load_dest_lng(self):
+        invalid = copy.deepcopy(self.valid_payload)
+        invalid['dest_lng'] = ''        
+        response = client.post(
+            reverse('get_post_loads'),
+            data=json.dumps(invalid),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+class UpdateSingleTruckTest(TestCase):
+    """ Test module for updating an existing truck record """
+
+    def setUp(self):
+        self.obj1 = Truck.objects.create(
+            truck='Beyond Landscape & Design Llcilsonville', 
+            city='Fremont', 
+            state='CA', 
+            lat=37.5482697, 
+            lng=-121.9885719
+        )
+        self.valid_payload = { 
+            'truck': 'Beyond Landscape & Design Llcilsonville', 
+            'city': 'test', 
+            'state': 'CA', 
+            'lat': 37.5482697, 
+            'lng': -121.9885719
+        }
+        self.invalid_payload = {
+            'truck': '', 
+            'city': 'Fremont', 
+            'state': 'CA', 
+            'lat': 37.5482697, 
+            'lng': -121.9885719
+        }
+
+    def test_valid_update_truck(self):
+        response = client.put(
+            reverse('get_delete_update_truck', kwargs={'pk': self.obj1.pk}),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_invalid_update_truck(self):
+        response = client.put(
+            reverse('get_delete_update_truck', kwargs={'pk': self.obj1.pk}),
+            data=json.dumps(self.invalid_payload),
+            content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+class UpdateSingleLoadTest(TestCase):
+    """ Test module for updating an existing load record """
+
+    def setUp(self):
+        self.obj1 = Load.objects.create(
+            product='Light bulbs', 
+            orig_city='Sikeston', 
+            orig_state='MO',
+            orig_lat=36.876719,
+            orig_lng=-89.5878579,
+            dest_city='Grapevine',
+            dest_state='TX',
+            dest_lat=32.9342919,
+            dest_lng=-97.0780654
+        )
+        self.valid_payload = {
+            'product': 'Light bulbs', 
+            'orig_city': 'Sikeston', 
+            'orig_state': 'AL',
+            'orig_lat': 36.876719,
+            'orig_lng': -89.5878579,
+            'dest_city': 'Grapevine',
+            'dest_state': 'TX',
+            'dest_lat': 32.9342919,
+            'dest_lng': -97.0780654
+        }
+        self.invalid_payload = {
+            'product': 'Light bulbs', 
+            'orig_city': 'Sikeston', 
+            'orig_state': '',
+            'orig_lat': 36.876719,
+            'orig_lng': -89.5878579,
+            'dest_city': 'Grapevine',
+            'dest_state': 'TX',
+            'dest_lat': 32.9342919,
+            'dest_lng': -97.0780654
+        }
+
+    def test_valid_update_truck(self):
+        response = client.put(
+            reverse('get_delete_update_load', kwargs={'pk': self.obj1.pk}),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_invalid_update_truck(self):
+        response = client.put(
+            reverse('get_delete_update_load', kwargs={'pk': self.obj1.pk}),
+            data=json.dumps(self.invalid_payload),
+            content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+class DeleteSingleTruckTest(TestCase):
+    """ Test module for deleting an existing truck record """
+
+    def setUp(self):
+        self.obj1 = Truck.objects.create(
+            truck='Beyond Landscape & Design Llcilsonville', 
+            city='Fremont', 
+            state='CA', 
+            lat=37.5482697, 
+            lng=-121.9885719
+        )
+
+    def test_valid_delete_truck(self):
+        response = client.delete(
+            reverse('get_delete_update_truck', kwargs={'pk': self.obj1.pk}))
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_invalid_delete_truck(self):
+        response = client.delete(
+            reverse('get_delete_update_truck', kwargs={'pk': 30}))
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+class DeleteSingleLoadTest(TestCase):
+    """ Test module for deleting an existing load record """
+
+    def setUp(self):
+        self.obj1 = Load.objects.create(
+            product='Light bulbs', 
+            orig_city='Sikeston', 
+            orig_state='MO',
+            orig_lat=36.876719,
+            orig_lng=-89.5878579,
+            dest_city='Grapevine',
+            dest_state='TX',
+            dest_lat=32.9342919,
+            dest_lng=-97.0780654
+        )
+
+    def test_valid_delete_load(self):
+        response = client.delete(
+            reverse('get_delete_update_load', kwargs={'pk': self.obj1.pk}))
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_invalid_delete_load(self):
+        response = client.delete(
+            reverse('get_delete_update_load', kwargs={'pk': 30}))
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

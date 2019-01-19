@@ -7,24 +7,23 @@ class TruckTest(TestCase):
 
     def setUp(self):
         Truck.objects.create(
-            id_truck=1, truck='Hartford Plastics Incartford', city='Florence', state='AL', lat=34.79981, lng=-87.677251)
+            truck='Hartford Plastics Incartford', city='Florence', state='AL', lat=34.79981, lng=-87.677251)
         Truck.objects.create(
-            id_truck=2, truck='Beyond Landscape & Design Llcilsonville', city='Freemont', state='CA', lat=37.5482697, lng=-121.9885719)
+            truck='Beyond Landscape & Design Llcilsonville', city='Freemont', state='CA', lat=37.5482697, lng=-121.9885719)
 
     def test_truck_name(self):
         truck1 = Truck.objects.get(truck='Hartford Plastics Incartford')
         truck2 = Truck.objects.get(truck='Beyond Landscape & Design Llcilsonville')
         self.assertEqual(
-            truck1.get_truck_info(), "Hartford Plastics Incartford is located in Florence / AL at latitude 34.799810 and longitude -87.677251")
+            truck1.get_truck_info(), "Hartford Plastics Incartford is located in Florence / AL at latitude 34.7998100 and longitude -87.6772510")
         self.assertEqual(
-            truck2.get_truck_info(), "Beyond Landscape & Design Llcilsonville is located in Freemont / CA at latitude 37.548270 and longitude -121.988572")
+            truck2.get_truck_info(), "Beyond Landscape & Design Llcilsonville is located in Freemont / CA at latitude 37.5482697 and longitude -121.9885719")
 
 class LoadTest(TestCase):
     """ Test module for Load model """
 
     def setUp(self):
         Load.objects.create(
-            id_load=1, 
             product='Light bulbs', 
             orig_city='Sikeston', 
             orig_state='MO',
@@ -36,7 +35,6 @@ class LoadTest(TestCase):
             dest_lng=-97.0780654
         )
         Load.objects.create(
-            id_load=2, 
             product='Recyclables', 
             orig_city='Christiansburg', 
             orig_state='VA',
@@ -48,7 +46,7 @@ class LoadTest(TestCase):
             dest_lng=-81.5322149
         )
 
-    def test_truck_name(self):
+    def test_load_name(self):
         obj1 = Load.objects.get(product='Light bulbs')
         obj2 = Load.objects.get(product='Recyclables')
         self.assertEqual(

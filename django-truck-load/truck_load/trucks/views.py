@@ -21,12 +21,19 @@ def get_delete_update_truck(request, pk):
     if request.method == 'GET':
         serializer = TruckSerializer(truck)
         return Response(serializer.data)
+
     # delete a single truck
     elif request.method == 'DELETE':
-        return Response({})
+        truck.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
     # update details of a single truck
     elif request.method == 'PUT':
-        return Response({})
+        serializer = TruckSerializer(truck, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # /trucks
 @api_view(['GET', 'POST'])
@@ -39,21 +46,22 @@ def get_post_trucks(request):
         trucks = Truck.objects.all()
         serializer = TruckSerializer(trucks, many=True)
         return Response(serializer.data)
+
     # insert a new record for a truck
     elif request.method == 'POST':
         data = {
-            'id_truck': request.data.get('id_truck'), 
             'truck': request.data.get('truck'), 
             'city': request.data.get('city'), 
             'state': request.data.get('state'), 
-            'lat': float(request.data.get('lat')), 
-            'lng': float(request.data.get('lng'))
+            'lat': request.data.get('lat'), 
+            'lng': request.data.get('lng')
         }
         serializer = TruckSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # /load/:id_load
 @api_view(['GET', 'DELETE', 'PUT'])
@@ -70,12 +78,19 @@ def get_delete_update_load(request, pk):
     if request.method == 'GET':
         serializer = LoadSerializer(load)
         return Response(serializer.data)
+
     # delete a single load
     elif request.method == 'DELETE':
-        return Response({})
+        load.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+        
     # update details of a single load
     elif request.method == 'PUT':
-        return Response({})
+        serializer = LoadSerializer(load, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # /loads
 @api_view(['GET', 'POST'])
@@ -91,16 +106,15 @@ def get_post_loads(request):
     # insert a new record for a load
     elif request.method == 'POST':
         data = {
-        	'id_load': request.data.get('id_load'), 
-			'product': request.data.get('product'), 
-			'orig_city': request.data.get('orig_city'), 
-			'orig_state': request.data.get('orig_state'),
-			'orig_lat': float(request.data.get('orig_lat')),
-			'orig_lng': float(request.data.get('orig_lng')),
-			'dest_city': request.data.get('dest_city'),
-			'dest_state': request.data.get('dest_state'),
-			'dest_lat': float(request.data.get('dest_lat')),
-			'dest_lng': float(request.data.get('dest_lng'))
+            'product': request.data.get('product'), 
+            'orig_city': request.data.get('orig_city'), 
+            'orig_state': request.data.get('orig_state'),
+            'orig_lat': request.data.get('orig_lat'),
+            'orig_lng': request.data.get('orig_lng'),
+            'dest_city': request.data.get('dest_city'),
+            'dest_state': request.data.get('dest_state'),
+            'dest_lat': request.data.get('dest_lat'),
+            'dest_lng': request.data.get('dest_lng')
         }
         serializer = LoadSerializer(data=data)
         if serializer.is_valid():
