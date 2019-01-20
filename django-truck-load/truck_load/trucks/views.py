@@ -146,7 +146,6 @@ def get_map_trucks_to_loads(request):
         """
 
         loads = Load.objects.all()
-        print(loads)
         loadSerializer = LoadSerializer(loads, many=True)
 
         trucks = Truck.objects.all()
@@ -223,37 +222,18 @@ def get_map_trucks_to_loads(request):
                             break
 
 
-
-        # Get only the 3 nearest trucks
-        # distances_nearest = {}
-        # for load_id, trucks in distances.items():
-
-        #     print("\n\n---------------\n")
-        #     print("All routes: ")
-        #     for truck in trucks:
-        #         print(truck)
-
-            
-        #     print("\nNearest trucks to the loads: ")
-        #     print(distances_nearest[load_id])
-        # print(assigned_trucks)
-
         # Calculates the route overall distance in km
         overall_distance_to_loads = 0.0
         overall_distance_between_origins_and_dests = 0.0
         overall_assigns = []
         for truck_id, assigned_load in assigned_trucks.items():
 
-            
-
             current_load = Load.objects.get(pk=assigned_load["load_id"])
             current_truck = Truck.objects.get(pk=truck_id)
 
             distance_between_orig_and_dest = distance_between_coordinates(current_load.dest_lat, current_load.dest_lng, current_load.orig_lat, current_load.orig_lng)
             overall_distance_between_origins_and_dests += distance_between_orig_and_dest
-            overall_distance += assigned_load["distance"]
-            # current_load = loads.filter(pk=assigned_load["load_id"])
-            # current_truck = trucks[truck_id]
+            overall_distance_to_loads += assigned_load["distance"]
 
             overall_assigns.append({
 
@@ -279,37 +259,13 @@ def get_map_trucks_to_loads(request):
                 "truck_state": current_truck.state,
                 "truck_distance_to_load_origin": assigned_load["distance"]
             })
-            # best_routes_for_load = [distances[load_id].keys()]
-            # best_routes_for_load = []
 
-            # print(distances[load])
-
-
-            # while (len(best_routes_for_load) < 3):
-            #     min_route = min(distances[load_id], key=distances[load_id].get)
-            #     best_routes_for_load.append(min_route)
-            #     del distances[load_id][min_route]
-
-            # print("\n\n---------------\n")
-            # print("All routes: ")
-            # print(list(distances[load_id].keys()))
-            # print("\nBest routes: ")
-            # print(best_routes_for_load)
-            # print(best_routes_for_load)
-            # for truck_distance in distances[load_id].items():
-
-
-            #     best_routes_for_load[truck_distance] = 
-
-            # best_route[load_id] = min(distances[load_id], key=distances[load_id].get)
-
-        
-        # for load_id, 
         overall_distance_total = overall_distance_to_loads + overall_distance_between_origins_and_dests
         response = {
             "overall_distance_to_loads": overall_distance_to_loads,
             "overall_distance_between_origins_and_dests": overall_distance_between_origins_and_dests,
             "overall_distance_total": overall_distance_total,
+            "unit": "km",
             "assigns": overall_assigns
         }
         return Response(response)
