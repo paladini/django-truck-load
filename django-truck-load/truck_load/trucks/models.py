@@ -1,4 +1,5 @@
 from django.db import models
+from .utils import distance_between_coordinates
 
 # Create your models here.
 class Truck(models.Model):
@@ -14,6 +15,12 @@ class Truck(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
+    def distance_to_coordinates(self, dest_lat, dest_lng):
+        if (self.lat) and (self.lng):
+            return distance_between_coordinates(self.lat, self.lng, dest_lat, dest_lng)
+        else:
+            raise ValidationError("Truck latitude or longitude is missing.")
+
     def clean(self):
 
         if (not self.truck) or (not self.truck.strip()):
@@ -58,6 +65,12 @@ class Load(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def distance_to_destination(self):
+        if (self.orig_lat) and (self.orig_lng) and (self.dest_lat) and (self.dest_lng):
+            return distance_between_coordinates(self.orig_lat, self.orig_lng, self.dest_lat, self.dest_lng)
+        else:
+            raise ValidationError("Truck latitude or longitude is missing.")
     
     def clean(self):
 

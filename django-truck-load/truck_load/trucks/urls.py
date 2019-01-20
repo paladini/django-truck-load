@@ -25,5 +25,12 @@ urlpatterns = [
         r'^api/v1/loads/$',
         views.get_post_loads,
         name='get_post_loads'
+    ),
+
+    # The entry point for the algorithm to map trucks to loads
+    url(
+        r'^api/v1/map_trucks_to_loads/$',
+        views.get_map_trucks_to_loads,
+        name='get_map_trucks_to_loads'
     )
 ]
