@@ -135,15 +135,18 @@ def get_map_trucks_to_loads(request):
 
     if request.method == 'GET':
 
-        # structure = {
-        #     <load_id>: [
-        #         <distance_in_km>: <truck_id>,
-        #         <distance_in_km>: <truck_id>,
-        #         ...
-        #     ]
-        # }
+        """
+        distances_structure = {
+            <load_id>: [
+                { "distance": <distance_in_km>, "truck_id": <truck_id>},
+                { "distance": <distance_in_km>, "truck_id": <truck_id>},
+                ...
+            ]
+        }
+        """
 
         loads = Load.objects.all()
+        print(loads)
         loadSerializer = LoadSerializer(loads, many=True)
 
         trucks = Truck.objects.all()
@@ -157,37 +160,127 @@ def get_map_trucks_to_loads(request):
         if (len(trucks) <= 0):
             return Response({'message': 'No trucks found in the database.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        def sort_by_distance(e):
-            return e['distance']
 
-        # Calculates the distance between trucks and all the loads/cargos.
+        # Calculates all the distances between trucks and the loads/cargos.
         distances = {}
+        distances_nearest = {}
+        assigned_trucks = {}
         for load in loads:
 
             # Calculates the distance between the origin of a specific load/cargo and all the available trucks
             load_distances = []
-            # load_distances = {}
             for truck in trucks:
-                # load_distances[distance_between_coordinates(truck.lat, truck.lng, load.orig_lat, load.orig_lng)] = truck.pk
                 load_distances.append({
                     "distance": distance_between_coordinates(truck.lat, truck.lng, load.orig_lat, load.orig_lng),
                     "truck_id": truck.pk
                 })
-                # load_distances[] = truck.pk
 
             load_distances = sorted(load_distances, key=lambda d: float(d['distance']))
-            # load_distances = load_distances.sort(key=sort_by_distance)
-            print(load_distances)
-            distances[load.pk] = load_distances[:2]
+            
+            # Stores the distance from all the trucks to this load
+            distances[load.pk] = load_distances
 
-        # Find the best route for each load
-        # print(distances)
+            # Stores the distance from the 3 nearest trucks to this load
+            distances_nearest[load.pk] = load_distances[:3]
 
-        best_route = {}
-        for load in distances.keys():
+            # Check if the nearest truck is still available
+            for near_truck in distances_nearest[load.pk]:
 
+                # If the truck is not assigned to other load, then assign this load to the nearest truck.
+                if near_truck["truck_id"] not in assigned_trucks:
+                    assigned_trucks[near_truck["truck_id"]] = {
+                        "load_id": load.pk,
+                        "distance": near_truck["distance"]
+                    }
+                    break
+                else:
+
+                    # Check if the distance between already assigned truck and it's load is lesser than the distance between this truck and the current load being tested.
+                    assigned_truck = assigned_trucks[near_truck["truck_id"]]
+                    if assigned_truck["distance"] > near_truck["distance"]:
+
+                        # Then checks if the distance (a) between the already assigned load and it's second truck option; is less than the distance (b) between the current load and the already assigned truck
+                        # If (a) distance <= (b) distance:
+                        #   1. Replaces the already assigned truck for the second option of the already assigned load
+                        #   2. Assign the old assigned truck to the current load
+                        if distances_nearest[assigned_truck["load_id"]][1]["distance"] <= near_truck["distance"]:
+                            
+                            # 1.1 - Removes the assigned truck from the already assigned load
+                            assigned_load_id = assigned_truck["load_id"]
+                            del assigned_trucks[near_truck["truck_id"]]
+
+                            # 1.2 - Assign the "already assigned load" to it's second nearest truck
+                            assigned_trucks[distances_nearest[assigned_load_id][1]["truck_id"]] = {
+                                "load_id": assigned_load_id,
+                                "distance": distances_nearest[assigned_load_id][1]["distance"]
+                            }
+
+                            # 2.1 - Assign the old assigned truck to the current load
+                            assigned_trucks[near_truck["truck_id"]] = {
+                                "load_id": load.pk,
+                                "distance": near_truck["distance"]
+                            }
+                            break
+
+
+
+        # Get only the 3 nearest trucks
+        # distances_nearest = {}
+        # for load_id, trucks in distances.items():
+
+        #     print("\n\n---------------\n")
+        #     print("All routes: ")
+        #     for truck in trucks:
+        #         print(truck)
+
+            
+        #     print("\nNearest trucks to the loads: ")
+        #     print(distances_nearest[load_id])
+        # print(assigned_trucks)
+
+        # Calculates the route overall distance in km
+        overall_distance_to_loads = 0.0
+        overall_distance_between_origins_and_dests = 0.0
+        overall_assigns = []
+        for truck_id, assigned_load in assigned_trucks.items():
+
+            
+
+            current_load = Load.objects.get(pk=assigned_load["load_id"])
+            current_truck = Truck.objects.get(pk=truck_id)
+
+            distance_between_orig_and_dest = distance_between_coordinates(current_load.dest_lat, current_load.dest_lng, current_load.orig_lat, current_load.orig_lng)
+            overall_distance_between_origins_and_dests += distance_between_orig_and_dest
+            overall_distance += assigned_load["distance"]
+            # current_load = loads.filter(pk=assigned_load["load_id"])
+            # current_truck = trucks[truck_id]
+
+            overall_assigns.append({
+
+                # Load/Cargo related stuff
+                "load_id": assigned_load["load_id"], 
+                "load_name": current_load.product,
+                "load_origin_city": current_load.orig_city,
+                "load_origin_state": current_load.orig_state,
+                "load_origin_latitude": current_load.orig_lat,
+                "load_origin_longitude": current_load.orig_lng,
+                "load_destination_city": current_load.dest_city,
+                "load_destination_state": current_load.dest_state,
+                "load_destination_latitude": current_load.dest_lat,
+                "load_destination_longitude": current_load.dest_lng,
+                "load_distance_between_origin_and_destination": distance_between_orig_and_dest,
+
+                # Truck related stuff 
+                "truck_id": truck_id,
+                "truck_name": current_truck.truck,
+                "truck_latitude": current_truck.lat,
+                "truck_longitude": current_truck.lng,
+                "truck_city": current_truck.city,
+                "truck_state": current_truck.state,
+                "truck_distance_to_load_origin": assigned_load["distance"]
+            })
             # best_routes_for_load = [distances[load_id].keys()]
-            best_routes_for_load = []
+            # best_routes_for_load = []
 
             # print(distances[load])
 
@@ -210,5 +303,14 @@ def get_map_trucks_to_loads(request):
 
             # best_route[load_id] = min(distances[load_id], key=distances[load_id].get)
 
-        return Response(best_route)
+        
+        # for load_id, 
+        overall_distance_total = overall_distance_to_loads + overall_distance_between_origins_and_dests
+        response = {
+            "overall_distance_to_loads": overall_distance_to_loads,
+            "overall_distance_between_origins_and_dests": overall_distance_between_origins_and_dests,
+            "overall_distance_total": overall_distance_total,
+            "assigns": overall_assigns
+        }
+        return Response(response)
 
